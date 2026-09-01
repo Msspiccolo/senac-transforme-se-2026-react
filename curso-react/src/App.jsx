@@ -5,10 +5,10 @@ function App() {
               Return só retorna 1 coisa*/
     <>
       <nav class="flex items-center py-2 px-2 shadow-lg fixed absolute top-0 bg-white w-full">
-        <a class="mr-2  bg-primary hover:shadow-inner text-white" href="#about">Sobre</a>
-        <a class="mr-2  bg-primary hover:shadow-inner text-white" href="#prices"> Preços</a>
-        <a class="mr-2  bg-primary hover:shadow-inner text-white" href="#features">Benefícios</a>
-        <a class="mr-5  bg-primary hover:shadow-inner text-white rounded ml-auto shadow left-0 " href="auth.html">Acessar</a>
+        <a class="mr-2 px-2  bg-primary hover:shadow-inner text-white" href="#about">Sobre</a>
+        <a class="mr-2 px-2  bg-primary hover:shadow-inner text-white" href="#prices"> Preços</a>
+        <a class="mr-2 px-2 bg-primary hover:shadow-inner text-white" href="#features">Benefícios</a>
+        <a class="mr-5 px-2 bg-primary hover:shadow-inner text-white rounded ml-auto shadow left-0 " href="auth.html">Acessar</a>
       </nav>
       <main>
         <div class="max-w-lg mx-auto py-6  ">
