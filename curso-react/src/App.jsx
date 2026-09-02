@@ -1,20 +1,24 @@
 import { Routes, Route } from 'react-router';
 import Home from './pages/Home.jsx';
-import Auth from './pages/auth.jsx';
+import Auth from './pages/Auth.jsx';
+import Painel from './pages/painel.jsx';
+
 function App() {
-  /*Tudo do lado de fora é Js*/
+  // Tudo do lado de fora é JS
 
-  return (   /*Tudo dentro do () é HTML Return só retorna 1 coisa*/
+  return (
+    // Tudo dentro do () é o JSX que o return retorna
     <Routes>
-      <Route path="/" element={<Home />}   /*Indica que está retornando o return de Home*//>
-      
-      <Route path="/auth" element={< Auth />} />
 
+      {/* Indica que está retornando o componente Home */}
+      <Route path="/" element={<Home />} />
+
+      <Route path="/auth" element={<Auth />} />
+
+      <Route path="/painel" element={<Painel />} />
 
     </Routes>
-
-  )
+  );
 }
-
 
 export default App;
