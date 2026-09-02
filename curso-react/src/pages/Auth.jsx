@@ -1,7 +1,15 @@
-import { Link } from "react-router";
+import { useState } from 'react';
+import { Link } from 'react-router';
 
 function Auth() {
-    return (
+    /*const [variavel, funcaoAlteraVariavel]= useState('valor inicial');*/
+    const [batatinha, setBatatinha] = useState(2);
+
+    function sub(){
+        setBatatinha(batatinha - 1)
+    }
+
+       return (
         <>
             <nav className="flex items-center py-2 px-2 shadow-lg fixed top-0 bg-[#010620] w-full z-50">
                 <h2 className="mr-2 px-2 font-bold">
@@ -36,6 +44,8 @@ function Auth() {
                 >
                     Menu
                 </Link>
+
+
             </nav>
 
             <div className="bg-gradient-to-r from-[#24132F] via-[#17234A] to-[#102A52] flex min-h-screen 
@@ -78,11 +88,16 @@ function Auth() {
 
                         <Link
                             id="btLogin"
-                            className="mt-5 rounded-md bg-orange-500 py-2 text-center font-bold text-white hover:bg-orange-600"
+                            className="mr-2 px-2 mt-5 rounded-md bg-orange-500 py-2 text-center font-bold text-white hover:bg-orange-600"
                             to="/painel"
                         >
                             Entrar
                         </Link>
+
+                       
+                        <div className="bg-red-100 rounded-full p-2 text-black font-bold"  onClick={sub} >-</div>
+                        {batatinha}
+                        <div className="bg-green-100 rounded-full p-2 text-black font-bold" onClick={()=>setBatatinha(batatinha+1)} >+</div>
 
                     </form>
                 </div>
