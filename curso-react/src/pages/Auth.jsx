@@ -3,13 +3,12 @@ import { Link } from 'react-router';
 
 function Auth() {
     /*const [variavel, funcaoAlteraVariavel]= useState('valor inicial');*/
-    const [batatinha, setBatatinha] = useState(2);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
-    function sub(){
-        setBatatinha(batatinha - 1)
-    }
 
-       return (
+
+    return (
         <>
             <nav className="flex items-center py-2 px-2 shadow-lg fixed top-0 bg-[#010620] w-full z-50">
                 <h2 className="mr-2 px-2 font-bold">
@@ -65,39 +64,33 @@ function Auth() {
                     </div>
 
                     <form className="flex flex-col gap-5">
-
-                        Email:
-
+                        <span className="text-left">Email: </span>
                         <input
-                            id="iEmaillogin"
                             type="email"
+                            value={email}
                             className="w-full rounded-lg border border-[#263B63] !bg-[#0A1730] px-4 py-3 text-white outline-none 
                             transition placeholder:text-[#8FA4C7] focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
                             placeholder="Digite o seu email cadastrado:"
+                            onChange={(e) => setEmail(e.target.value)}
                         />
-
-                        Senha:
+                        {email}
+                        <span className="text-left">Senha:</span>
 
                         <input
-                            id="iPassLogin"
                             type="password"
+                            value={password}
                             className="w-full rounded-lg border border-[#263B63] !bg-[#0A1730] px-4 py-3 text-white outline-none 
                             transition placeholder:text-[#8FA4C7] focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
                             placeholder="Digite sua senha:"
+                            onChange={(e) => setPassword(e.target.value)}
                         />
 
                         <Link
-                            id="btLogin"
-                            className="mr-2 px-2 mt-5 rounded-md bg-orange-500 py-2 text-center font-bold text-white hover:bg-orange-600"
+                            className="mr-auto px-2  rounded ml-auto bg-orange-500 py-2  font-bold text-white hover:bg-orange-600"
                             to="/painel"
                         >
                             Entrar
                         </Link>
-
-                       
-                        <div className="bg-red-100 rounded-full p-2 text-black font-bold"  onClick={sub} >-</div>
-                        {batatinha}
-                        <div className="bg-green-100 rounded-full p-2 text-black font-bold" onClick={()=>setBatatinha(batatinha+1)} >+</div>
 
                     </form>
                 </div>
