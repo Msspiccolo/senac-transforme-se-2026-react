@@ -23,7 +23,7 @@ function Auth() {
             return
         }
 
-        if (!user.password == pass){
+        if (user.password == pass){
             //mando para tela do painel
          localStorage.setItem("loggeded", JSON.stringify(user))
             setMsg("Bem Vindo")
@@ -123,7 +123,7 @@ function Auth() {
                             to="/painel"
                         >
                             Entrar
-                        </a>
+                     </a>
 
                     </form>
                 </div>
