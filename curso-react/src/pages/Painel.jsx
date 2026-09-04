@@ -1,9 +1,18 @@
 import { Link } from 'react-router'
 import { useState } from 'react';
+
 function Painel() {
-    const [modal, setModal] = useState(false)
+    const [modal, setModal] = useState(false)//bollean
+    const [users, setUsers] = useState([])//vetor
+    const [user, setUser] = useState({})//objeto
 
-
+    function handleRegister() {
+        const newUsers = [...users, user]
+        setUsers(newUsers)
+        localStorage.setItem('users', JSON.stringify(newUsers))
+        setUser({})
+        setModal(false)
+    }
 
 
     return (
@@ -52,37 +61,42 @@ function Painel() {
         left-0  items-center  justify-center bg-black/50 z-50 ">
 
                     <div className="relative max-w-md w-full p-5 bg-about rounded-lg 
-        shadow-md flex flex-col bg-white">
+        shadow-md flex flex-col bg-gradient-to-r from-[#24132F] via-[#17234A] to-[#102A52]">
 
                         <a onClick={() => setModal(false)} id="btClose" className="bg-prices absolute top-0 right-0  px-2 
              rounded-full cursor-pointer ">
                             X
                         </a>
 
-                        <h2>Cadastre um novo usuário!</h2>
-                        <p>Preencha as informações abaixo:</p>
+                        <h2 className="text-white font-bold">Cadastre um novo usuário!</h2>
+                        <p className="text-white font-bold">Preencha as informações abaixo: </p>
+
 
                         <form className="flex flex-col">
 
-                            <span className="text-center text-black ">Name: </span>
-                            <input id="iName" className="text-black w-full rounded-lg border outline-none border-[#263B63] !bg-blue-100 px-4 py-3
-                            placeholder:text-[#8FA4C7] focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
+                            <span className="p-3 text-center text-white font-bold ">Name: </span>
+                            <input onChange={(e) => setUser({ ...user, nome: e.target.value })} className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
+                            placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
                                 type="text" placeholder="Digite seu nome completo" />
 
-                            <span className="text-center text-black ">Email: </span>
-                            <input id="iEmail" className="text-black w-full rounded-lg border outline-none border-[#263B63] !bg-blue-100 px-4 py-3" type="email" placeholder="Digite o seu melhor email" />
+                            <span className="p-3 text-center text-white font-bold ">Email: </span>
+                            <input onChange={(e) => setUser({ ...user, email: e.target.value })} className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
+                             placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
+                                type="email" placeholder="Digite o seu melhor email" />
 
 
-                            <span className="text-center text-black ">Senha: </span>
-                            <input id="iPass" className="text-black w-full rounded-lg border outline-none border-[#263B63] !bg-blue-100 px-4 py-3" type="password" placeholder="Letra maiúscula e números" />
+                            <span className="p-3 text-center text-white font-bold ">Senha: </span>
+                            <input onChange={(e) => setUser({ ...user, password: e.target.value })} className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
+                             placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
+                                type="password" placeholder="Letra maiúscula e números" />
 
-                            <span className="text-center text-black ">Data Nascimento: </span>
-                            <input id="iBirth" className="text-black w-full rounded-lg border outline-none border-[#263B63] !bg-blue-100 px-4 py-3" type="date" />
+                            <span className="p-3 text-center text-white font-bold ">Data Nascimento: </span>
+                            <input onChange={(e) => setUser({ ...user, dataNascimento: e.target.value })} className="text-black  w-full rounded-lg border-2 outline-none border-purple-900 
+                             !bg-purple-100 px-4 py-3 p-3placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30" type="date" />
 
 
-
-                            <a id="formRegister" className="mt-5 bg-primary text-white 
-                        text-center font-bold rounded-md py-2"> Salvar
+                            <a onClick={handleRegister} className=" p-4 mr-auto px-2  mt-2 rounded ml-auto bg-orange-500 py-2  font-bold text-white hover:bg-orange-600">
+                                Salvar
                             </a>
 
                         </form>
@@ -93,14 +107,15 @@ function Painel() {
 
             )}
 
-            <table className="mt-15">
+            <table>
                 <thead>
-                    <th>Nome</th>
+                    <tr>
+                        <th>Nome</th>
 
-                    <th>Email</th>
+                        <th>Email</th>
 
-                    <th>Ações</th>
-
+                        <th>Ações</th>
+                    </tr>
                 </thead>
 
                 <tbody className="font-secundary">

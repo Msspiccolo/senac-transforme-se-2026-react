@@ -3,8 +3,41 @@ import { Link } from 'react-router';
 
 function Auth() {
     /*const [variavel, funcaoAlteraVariavel]= useState('valor inicial');*/
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("")
+    const [pass, setPassword] = useState("")
+    const [msg, setMsg ] = useState("")
+
+    function handleLogin(){
+        const users = JSON.parse(localStorage.getItem("users"));
+    
+        let user = users.find(u => {
+            return u.email== email
+        
+        })
+
+        if (!user){
+            // Os estudantes iram fazer uma useState de mensagem
+            // eslint-disable-next-line no-const-assign
+            setMsg("Usuário não encontrado");
+
+            return
+        }
+
+        if (!user.password == pass){
+            //mando para tela do painel
+         localStorage.setItem("loggeded", JSON.stringify(user))
+            setMsg("Bem Vindo")
+
+            
+
+        }else{
+            //outra mensagem usando a mesma UseState de mensagem
+              setMsg("Usuário não encontrado")
+
+        }
+
+
+    }
 
 
 
@@ -64,6 +97,7 @@ function Auth() {
                     </div>
 
                     <form className="flex flex-col gap-5">
+                        <span>{msg}</span>
                         <span className="text-left">Email: </span>
                         <input
                             type="email"
@@ -78,19 +112,18 @@ function Auth() {
 
                         <input
                             type="password"
-                            value={password}
+                            value={pass}
                             className="w-full rounded-lg border border-[#263B63] !bg-[#0A1730] px-4 py-3 text-white outline-none 
                             transition placeholder:text-[#8FA4C7] focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
                             placeholder="Digite sua senha:"
                             onChange={(e) => setPassword(e.target.value)}
                         />
 
-                        <Link
-                            className="mr-auto px-2  rounded ml-auto bg-orange-500 py-2  font-bold text-white hover:bg-orange-600"
+                        <a onClick={handleLogin} className="mr-auto px-2  rounded ml-auto bg-orange-500 py-2  font-bold text-white hover:bg-orange-600"
                             to="/painel"
                         >
                             Entrar
-                        </Link>
+                        </a>
 
                     </form>
                 </div>
