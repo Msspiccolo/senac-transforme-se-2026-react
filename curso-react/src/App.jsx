@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router';
 import Home from './pages/Home.jsx';
-import Auth from './pages/Auth.jsx';
+import Auth from './pages/auth.jsx';
 import Painel from './pages/painel.jsx';
 
 function App() {

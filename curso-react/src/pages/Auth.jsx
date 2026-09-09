@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
 function Auth() {
     /*const [variavel, funcaoAlteraVariavel]= useState('valor inicial');*/
     const [email, setEmail] = useState("")
     const [pass, setPassword] = useState("")
     const [msg, setMsg ] = useState("")
-
+    const nav = useNavigate();
     function handleLogin(){
         const users = JSON.parse(localStorage.getItem("users"));
     
@@ -20,15 +20,14 @@ function Auth() {
             // eslint-disable-next-line no-const-assign
             setMsg("Usuário não encontrado");
 
-            return
+            return;
         }
 
         if (user.password == pass){
             //mando para tela do painel
-         localStorage.setItem("loggeded", JSON.stringify(user))
-            setMsg("Bem Vindo")
-
-            
+         localStorage.setItem("loggeded", JSON.stringify(user));
+            setMsg("Bem Vindo");
+              nav('/painel');
 
         }else{
             //outra mensagem usando a mesma UseState de mensagem
