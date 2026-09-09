@@ -26,7 +26,7 @@ function Auth() {
         if (user.password == pass){
             //mando para tela do painel
          localStorage.setItem("loggeded", JSON.stringify(user));
-            setMsg("Seja bem indo");
+            setMsg("Seja bem vindo!");
               nav('/painel');
 
         }else{
