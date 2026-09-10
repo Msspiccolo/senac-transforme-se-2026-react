@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState} from 'react';
 import { Link, useNavigate } from 'react-router';
 
 function Auth() {
@@ -7,14 +7,18 @@ function Auth() {
     const [pass, setPassword] = useState("")
     const [msg, setMsg ] = useState("")
     const nav = useNavigate();
+
+   
+
     function handleLogin(){
         const users = JSON.parse(localStorage.getItem("users"));
+
     
-        let user = users.find(u => {
+        let user = users.find(u => {       
             return u.email== email
         
         })
-
+ 
         if (!user){
             // Os estudantes iram fazer uma useState de mensagem
             // eslint-disable-next-line no-const-assign

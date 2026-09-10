@@ -1,10 +1,47 @@
-import { Link} from 'react-router'
-import { useState } from 'react';
+import { Link } from 'react-router'
+import { useState, useEffect } from 'react';
 
 function Painel() {
     const [modal, setModal] = useState(false)//bollean
     const [users, setUsers] = useState([])//vetor
     const [user, setUser] = useState({})//objeto
+    const [loggeded, setLoggeded] = useState({})
+
+    useEffect(() => {
+        (async () => {
+            const loggeded = await JSON.parse(localStorage.getItem('loggeded'))
+            setLoggeded(loggeded)
+
+
+        })()
+    },
+
+        []
+    );
+
+
+    useEffect(() => {
+        (async () => {
+            const usersTemp = JSON.parse(localStorage.getItem('users'))
+            if (usersTemp) setUsers(usersTemp)
+
+        })()
+    },
+
+        []
+
+    );
+
+    function updateUser(pUser){
+        setModal(true)
+        setUser(pUser)
+    }
+
+    function removeUser(pUser){
+        setUser (pUser)
+   
+       
+    }
 
     function handleRegister() {
         const newUsers = [...users, user]
@@ -14,10 +51,18 @@ function Painel() {
         setModal(false)
     }
 
+   
+
+
 
     return (
+
         <>
-            <nav className="flex items-center py-2 px-2 shadow-lg fixed top-0 bg-[#010620] w-full z-50">
+
+            <h3 className="flex items-center text-center justify-center m-20  px-2 text-black font-bold py-4  ">Bem vindo, {loggeded?.nome} </h3>
+
+
+            <nav className="fixed top-0 flex items-center py-2 px-2 shadow-lg  bg-[#010620] w-full z-50">
                 <h2 className="mr-2 px-2 font-bold">
                     <span className="text-white">Prótese</span>
                     <span className="text-orange-500">Pay</span>
@@ -52,8 +97,8 @@ function Painel() {
                 </Link>
 
             </nav>
-            <h2 id="welcome"></h2>
-            <h3 id="usuarios"></h3>
+
+
 
             {modal && (
 
@@ -75,12 +120,12 @@ function Painel() {
                         <form className="flex flex-col">
 
                             <span className="p-3 text-center text-white font-bold ">Name: </span>
-                            <input onChange={(e) => setUser({ ...user, nome: e.target.value })} className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
+                            <input value ={user.nome} onChange={(e) => setUser({ ...user, nome: e.target.value })} className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
                             placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
                                 type="text" placeholder="Digite seu nome completo" />
 
                             <span className="p-3 text-center text-white font-bold ">Email: </span>
-                            <input onChange={(e) => setUser({ ...user, email: e.target.value })} className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
+                            <input value ={user.email} onChange={(e) => setUser({ ...user, email: e.target.value })} className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
                              placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
                                 type="email" placeholder="Digite o seu melhor email" />
 
@@ -91,7 +136,7 @@ function Painel() {
                                 type="password" placeholder="Letra maiúscula e números" />
 
                             <span className="p-3 text-center text-white font-bold ">Data Nascimento: </span>
-                            <input onChange={(e) => setUser({ ...user, dataNascimento: e.target.value })} className="text-black  w-full rounded-lg border-2 outline-none border-purple-900 
+                            <input value ={user.dataNascimento} onChange={(e) => setUser({ ...user, dataNascimento: e.target.value })} className="text-black  w-full rounded-lg border-2 outline-none border-purple-900 
                              !bg-purple-100 px-4 py-3 p-3placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30" type="date" />
 
 
@@ -102,6 +147,7 @@ function Painel() {
                         </form>
 
                     </div>
+
 
                 </div>)
 
@@ -118,8 +164,24 @@ function Painel() {
                     </tr>
                 </thead>
 
-                <tbody className="font-secundary">
+                <tbody className="font-secondary">
+                    {users.map(u => (
+                        <tr>
+                            <td>{u.nome}</td>
+                            <td>{u.email}</td>
+                            <td>
+                                <a className="cursor-pointer px-3 mx-4 hover:shadow shadow-md text-white rounded-full bg-green-500" 
+                                onClick={()=> updateUser(u)}
+                                >V</a>
 
+                                <a className="cursor-pointer px-3 mx-4 hover:shadow shadow-md text-white rounded-full bg-red-500"
+                                onClick={()=> removeUser(u)}
+                                >X</a>
+                            </td>
+                        </tr>
+
+
+                    ))}
                 </tbody>
 
             </table>
