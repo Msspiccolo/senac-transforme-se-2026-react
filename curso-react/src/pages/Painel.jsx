@@ -6,6 +6,8 @@ function Painel() {
     const [users, setUsers] = useState([])//vetor
     const [user, setUser] = useState({})//objeto
     const [loggeded, setLoggeded] = useState({})
+    const [isEdit, setIsEdit] = useState(false)
+    const [index, setIndex] = useState(-1)
 
     useEffect(() => {
         (async () => {
@@ -32,26 +34,51 @@ function Painel() {
 
     );
 
-    function updateUser(pUser){
-        setModal(true)
-        setUser(pUser)
-    }
 
-    function removeUser(pUser){
-        setUser (pUser)
-   
-       
+    function deleteUser(index) {
+        const newUsers= users.filter((u,i)=> {
+        return i != index
+
+        })
+        setUsers(newUsers)
+        localStorage.getItem('users', JSON.stringify(newUsers))
+        
+    
+        
+
+       }
+
+
+    function updateUser(indice) {
+        setModal(true)
+        setUser(users[indice])
+        setIndex(indice)
     }
 
     function handleRegister() {
-        const newUsers = [...users, user]
+        let newUsers
+
+        if (index != -1) {
+            newUsers = [...users]
+            newUsers[index] = user
+
+        } else {
+
+            newUsers = [...users, user]
+
+        }
+
         setUsers(newUsers)
         localStorage.setItem('users', JSON.stringify(newUsers))
+
         setUser({})
         setModal(false)
+        setIndex(-1)
+        setIsEdit(false)
+
     }
 
-   
+
 
 
 
@@ -103,48 +130,94 @@ function Painel() {
             {modal && (
 
                 (<div className="fixed flex top-0 right-0 bottom-0 
-        left-0  items-center  justify-center bg-black/50 z-50 ">
+                left-0  items-center  justify-center bg-black/50 z-50 ">
 
                     <div className="relative max-w-md w-full p-5 bg-about rounded-lg 
-        shadow-md flex flex-col bg-gradient-to-r from-[#24132F] via-[#17234A] to-[#102A52]">
+                    shadow-md flex flex-col bg-gradient-to-r from-[#24132F] via-[#17234A] to-[#102A52]">
 
-                        <a onClick={() => setModal(false)} id="btClose" className="bg-prices absolute top-0 right-0  px-2 
-             rounded-full cursor-pointer ">
+                        <a onClick={() => {
+                            setModal(false)
+                            setIsEdit(false)
+                            setUser({})
+                            setIndex(-1)
+
+                        }}
+                            className="bg-prices absolute top-0 right-0  px-2 
+                         rounded-full cursor-pointer ">
                             X
                         </a>
 
                         <h2 className="text-white font-bold">Cadastre um novo usuário!</h2>
                         <p className="text-white font-bold">Preencha as informações abaixo: </p>
 
-
-                        <form className="flex flex-col">
-
-                            <span className="p-3 text-center text-white font-bold ">Name: </span>
-                            <input value ={user.nome} onChange={(e) => setUser({ ...user, nome: e.target.value })} className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
-                            placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
-                                type="text" placeholder="Digite seu nome completo" />
-
-                            <span className="p-3 text-center text-white font-bold ">Email: </span>
-                            <input value ={user.email} onChange={(e) => setUser({ ...user, email: e.target.value })} className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
-                             placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
-                                type="email" placeholder="Digite o seu melhor email" />
+                        {isEdit ? (
 
 
-                            <span className="p-3 text-center text-white font-bold ">Senha: </span>
-                            <input onChange={(e) => setUser({ ...user, password: e.target.value })} className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
-                             placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
-                                type="password" placeholder="Letra maiúscula e números" />
+                            <form className="flex flex-col">
 
-                            <span className="p-3 text-center text-white font-bold ">Data Nascimento: </span>
-                            <input value ={user.dataNascimento} onChange={(e) => setUser({ ...user, dataNascimento: e.target.value })} className="text-black  w-full rounded-lg border-2 outline-none border-purple-900 
-                             !bg-purple-100 px-4 py-3 p-3placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30" type="date" />
+                                <label className="text-sm font-semibold text-white">Nome: </label>
+
+                                <input value={user.nome} onChange={(e) => setUser({ ...user, nome: e.target.value })}
+                                    className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
+                                placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
+                                    type="text" placeholder="Digite seu nome completo"
+                                />
+
+                                <label className="text-sm font-semibold text-white">Email: </label>
+
+                                <input value={user.email} onChange={(e) => setUser({ ...user, email: e.target.value })}
+                                    className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
+                                placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
+                                    type="email" placeholder="Digite o seu melhor email"
+                                />
 
 
-                            <a onClick={handleRegister} className=" p-4 mr-auto px-2  mt-2 rounded ml-auto bg-orange-500 py-2  font-bold text-white hover:bg-orange-600">
-                                Salvar
-                            </a>
+                                <label className="text-sm font-semibold text-white"> Senha: </label>
 
-                        </form>
+                                <input onChange={(e) => setUser({ ...user, password: e.target.value })}
+                                    className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
+                                placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
+                                    type="password" placeholder="Letra maiúscula e números"
+                                />
+
+                                <label className="text-sm font-semibold text-white">Data Nascimento: </label>
+
+                                <input value={user.dataNascimento} onChange={(e) => setUser({ ...user, dataNascimento: e.target.value })}
+                                    className="text-black  w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3 p-3
+                                placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
+                                    type="date"
+                                />
+
+                                {index != -1 && (
+                                    <a onClick={() => setIsEdit(false)}
+                                        className=" cursor-pointer p-4 mr-auto px-2  mt-2 rounded ml-auto bg-red-500 py-2  font-bold text-white hover:bg-red-200">
+                                        Cancelar
+                                    </a>
+                                )
+                                }
+
+
+                                <a onClick={handleRegister} className=" cursor-pointer p-4 mr-auto px-2  mt-2 rounded ml-auto bg-orange-500 py-2  font-bold text-white hover:bg-orange-300">
+                                    Salvar
+                                </a>
+
+                            </form>) : //else 
+                            (
+                                <>
+                                    <p>Nome:  {user.nome}</p>
+                                    <p>Email: {user.email}</p>
+                                    <p>Data de Nascimento:  {user.dataNascimento}</p>
+                                    <a onClick={() => setIsEdit(true)}
+                                        className=" cursor-pointer p-4 mr-auto px-2  mt-2 rounded ml-auto bg-orange-500 py-2  font-bold text-white hover:bg-white-600">
+                                        Alterar
+                                    </a>
+
+
+
+                                </>
+                            )
+
+                        }
 
                     </div>
 
@@ -152,41 +225,48 @@ function Painel() {
                 </div>)
 
             )}
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-
-                        <th>Email</th>
-
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-
-                <tbody className="font-secondary">
-                    {users.map(u => (
+          
+                <table className =" bg-indigo-100 flex-col text-center text-black  min-w-max  shadow-md bg-clip-border 
+                 items-center mb-2 mt-1 pl-2 border-slate-500">
+                    <thead>
                         <tr>
-                            <td>{u.nome}</td>
-                            <td>{u.email}</td>
-                            <td>
-                                <a className="cursor-pointer px-3 mx-4 hover:shadow shadow-md text-white rounded-full bg-green-500" 
-                                onClick={()=> updateUser(u)}
-                                >V</a>
+                            <th>Nome</th>
 
-                                <a className="cursor-pointer px-3 mx-4 hover:shadow shadow-md text-white rounded-full bg-red-500"
-                                onClick={()=> removeUser(u)}
-                                >X</a>
-                            </td>
+                            <th>Email</th>
+
+                            <th>Ações</th>
                         </tr>
+                    </thead>
+
+                    <tbody className="font-secondary">
+                        {users.map((u, i) => (
+                            <tr>
+                                <td>{u.nome}</td>
+                                <td>{u.email}</td>
+                                <td>
+                                    <a className="cursor-pointer px-3 mx-4 hover:shadow shadow-md text-white rounded-full bg-green-500"
+                                        onClick={() => updateUser(i)}
+                                    >V</a>
+
+                                    <a className="cursor-pointer px-3 mx-4 hover:shadow shadow-md text-white rounded-full bg-red-500"
+                                        onClick={() => deleteUser(i)}
+                                    >X</a>
+                                </td>
+                            </tr>
 
 
-                    ))}
-                </tbody>
+                        ))}
+                    </tbody>
 
-            </table>
-
-            <a onClick={() => setModal(true)} id="addUser" className="rounded-full bg-primary text-white px-4 py-3  fixed bottom-0 right-0"> + </a>
+                </table>
+          
+            <a onClick={() => {
+                setModal(true)
+                setIsEdit(true)
+            }}
+                className="rounded-full bg-primary text-white px-4 py-3  fixed bottom-0 right-0">
+                +
+            </a>
 
 
 

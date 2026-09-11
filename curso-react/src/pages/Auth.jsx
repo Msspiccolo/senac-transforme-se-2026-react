@@ -1,41 +1,41 @@
-import { useState} from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 
 function Auth() {
     /*const [variavel, funcaoAlteraVariavel]= useState('valor inicial');*/
     const [email, setEmail] = useState("")
     const [pass, setPassword] = useState("")
-    const [msg, setMsg ] = useState("")
+    const [msg, setMsg] = useState("")
     const nav = useNavigate();
 
-   
 
-    function handleLogin(){
+
+    function handleLogin() {
         const users = JSON.parse(localStorage.getItem("users"));
 
-    
-        let user = users.find(u => {       
-            return u.email== email
-        
+
+        let user = users.find(u => {
+            return u.email == email
+
         })
- 
-        if (!user){
+
+        if (!user) {
             // Os estudantes iram fazer uma useState de mensagem
-            // eslint-disable-next-line no-const-assign
+        
             setMsg("Usuário não encontrado");
 
             return;
         }
 
-        if (user.password == pass){
+        if (user.password == pass) {
             //mando para tela do painel
-         localStorage.setItem("loggeded", JSON.stringify(user));
+            localStorage.setItem("loggeded", JSON.stringify(user));
             setMsg("Seja bem vindo!");
-              nav('/painel');
+            nav('/painel');
 
-        }else{
+        } else {
             //outra mensagem usando a mesma UseState de mensagem
-              setMsg("Usuário não encontrado")
+            setMsg("Usuário não encontrado")
 
         }
 
@@ -126,7 +126,7 @@ function Auth() {
                             to="/painel"
                         >
                             Entrar
-                     </a>
+                        </a>
 
                     </form>
                 </div>
