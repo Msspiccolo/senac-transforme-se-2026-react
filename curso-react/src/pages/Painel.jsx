@@ -1,5 +1,6 @@
 import { Link } from 'react-router'
 import { useState, useEffect } from 'react';
+import { supabase } from '../../utils/supabase';
 
 function Painel() {
     const [modal, setModal] = useState(false)//bollean
@@ -55,26 +56,15 @@ function Painel() {
         setIndex(indice)
     }
 
-    function handleRegister() {
-        let newUsers
+   async function handleRegister() {
+        await supabase.auth.signUp({
+            email:user.email, 
+            password:user.password
 
-        if (index != -1) {
-            newUsers = [...users]
-            newUsers[index] = user
+        });
 
-        } else {
 
-            newUsers = [...users, user]
 
-        }
-
-        setUsers(newUsers)
-        localStorage.setItem('users', JSON.stringify(newUsers))
-
-        setUser({})
-        setModal(false)
-        setIndex(-1)
-        setIsEdit(false)
 
     }
 
