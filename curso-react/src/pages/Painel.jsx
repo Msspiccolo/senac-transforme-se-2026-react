@@ -9,6 +9,11 @@ function Painel() {
     const [loggeded, setLoggeded] = useState({})
     const [isEdit, setIsEdit] = useState(false)
     const [index, setIndex] = useState(-1)
+    
+    
+    const [spiner, setSpiner] = useState(false)
+    const [msg, setMsg] = useState('')
+
 
     useEffect(() => {
         (async () => {
@@ -57,17 +62,23 @@ function Painel() {
     }
 
    async function handleRegister() {
-        await supabase.auth.signUp({
+    setSpiner(true)
+        const {data: authData, error: authError } = await supabase.auth.signUp({
             email:user.email, 
             password:user.password
-
         });
 
+        if(authError){
+            setMsg(authError)
+            setSpiner(false)
 
-
-
+        return;
     }
 
+        setSpiner(false)
+
+
+ }
 
 
 
@@ -188,9 +199,9 @@ function Painel() {
 
 
                                 <a onClick={handleRegister} className=" cursor-pointer p-4 mr-auto px-2  mt-2 rounded ml-auto bg-orange-500 py-2  font-bold text-white hover:bg-orange-300">
-                                    Salvar
+                                    {spiner?'...':'Salvar'}
                                 </a>
-
+                                {msg}
                             </form>) : //else 
                             (
                                 <>
