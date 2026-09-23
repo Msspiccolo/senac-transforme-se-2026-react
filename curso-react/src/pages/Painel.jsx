@@ -9,8 +9,8 @@ function Painel() {
     const [loggeded, setLoggeded] = useState({})
     const [isEdit, setIsEdit] = useState(false)
     const [index, setIndex] = useState(-1)
-    
-    
+
+
     const [spiner, setSpiner] = useState(false)
     const [msg, setMsg] = useState('')
 
@@ -42,17 +42,17 @@ function Painel() {
 
 
     function deleteUser(index) {
-        const newUsers= users.filter((u,i)=> {
-        return i != index
+        const newUsers = users.filter((u, i) => {
+            return i != index
 
         })
         setUsers(newUsers)
         localStorage.getItem('users', JSON.stringify(newUsers))
-        
-    
-        
 
-       }
+
+
+
+    }
 
 
     function updateUser(indice) {
@@ -61,24 +61,63 @@ function Painel() {
         setIndex(indice)
     }
 
-   async function handleRegister() {
-    setSpiner(true)
-        const {data: authData, error: authError } = await supabase.auth.signUp({
-            email:user.email, 
-            password:user.password
+    async function handleRegister() {
+        setSpiner(true)
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+            email: user.email,
+            password: user.password
         });
 
-        if(authError){
-            setMsg(authError)
+        if (authError) {
+            //console.log(authError)
+            setMsg(authError.message)
             setSpiner(false)
 
-        return;
+            return;
+        }
+
+        if(!authData){
+            setMsg("Não foi possível cadastrar, verifique a internet")
+            setSpiner(false)
+            return;
+        }
+
+        const{ data: loginData, error: loginError} = await supabase.auth.signInWithPassword({
+            email:user.email,
+            password:user.password
+        });
+        
+        if(!loginError){
+            setMsg("Não foi possível efetuar o login, verifique seus dados")
+            setSpiner(false)
+            return;
+        }
+
+
+        const {error: profileError} = await supabase.from('profiles').insert({
+            user_id: loginData.user.id,
+            full_name: user.nome,
+            cpf: user.cpf,
+            telefone: user.phone,
+            gender: user.gender,
+            nascimento: user.nascimento
+        });
+
+
+         
+        if (profileError) {
+            //console.log(authError)
+            setMsg(profileError.message)
+            setSpiner(false)
+
+            return;
+        }
+
+
+     
+
+
     }
-
-        setSpiner(false)
-
-
- }
 
 
 
@@ -171,7 +210,38 @@ function Painel() {
                                 placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
                                     type="email" placeholder="Digite o seu melhor email"
                                 />
+                                <label className="text-sm font-semibold text-white">CPF: </label>
 
+                                <input value={user.cpf} onChange={(e) => setUser({ ...user, cpf: e.target.value })}
+                                    className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
+                                placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
+                                    type="text" placeholder="Digite o seu CPF:"
+                                />
+
+                                <label className="text-sm font-semibold text-white">Telefone: </label>
+
+                                <input value={user.phone} onChange={(e) => setUser({ ...user, phone: e.target.value })}
+                                    className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
+                                placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
+                                    type="text" placeholder="Digite o seu telefone: "
+                                />
+
+                                <label className="text-sm font-semibold text-white">Genero: </label>
+
+                                 <input value={user.gender} onChange={(e) => setUser({ ...user, gender: e.target.value })}
+                                    className="text-black  w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3 p-3
+                                placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
+                                    type="text"
+                                />
+
+
+                                 <label className="text-sm font-semibold text-white">Data Nascimento: </label>
+
+                                <input value={user.nascimento} onChange={(e) => setUser({ ...user, nascimento: e.target.value })}
+                                    className="text-black  w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3 p-3
+                                placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
+                                    type="date"
+                                />
 
                                 <label className="text-sm font-semibold text-white"> Senha: </label>
 
@@ -181,14 +251,7 @@ function Painel() {
                                     type="password" placeholder="Letra maiúscula e números"
                                 />
 
-                                <label className="text-sm font-semibold text-white">Data Nascimento: </label>
-
-                                <input value={user.dataNascimento} onChange={(e) => setUser({ ...user, dataNascimento: e.target.value })}
-                                    className="text-black  w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3 p-3
-                                placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
-                                    type="date"
-                                />
-
+                               
                                 {index != -1 && (
                                     <a onClick={() => setIsEdit(false)}
                                         className=" cursor-pointer p-4 mr-auto px-2  mt-2 rounded ml-auto bg-red-500 py-2  font-bold text-white hover:bg-red-200">
@@ -199,7 +262,7 @@ function Painel() {
 
 
                                 <a onClick={handleRegister} className=" cursor-pointer p-4 mr-auto px-2  mt-2 rounded ml-auto bg-orange-500 py-2  font-bold text-white hover:bg-orange-300">
-                                    {spiner?'...':'Salvar'}
+                                    {spiner ? '...' : 'Salvar'}
                                 </a>
                                 {msg}
                             </form>) : //else 
@@ -207,7 +270,11 @@ function Painel() {
                                 <>
                                     <p>Nome:  {user.nome}</p>
                                     <p>Email: {user.email}</p>
-                                    <p>Data de Nascimento:  {user.dataNascimento}</p>
+                                    <p>Data de Nascimento:  {user.nascimento}</p>
+                                    <p>CPF: {user.cpf} </p>
+                                    <p>Telefone: {user.phone} </p>
+                                    <p>Genero: {user.gender} </p>
+
                                     <a onClick={() => setIsEdit(true)}
                                         className=" cursor-pointer p-4 mr-auto px-2  mt-2 rounded ml-auto bg-orange-500 py-2  font-bold text-white hover:bg-white-600">
                                         Alterar
@@ -226,41 +293,41 @@ function Painel() {
                 </div>)
 
             )}
-          
-                <table className =" bg-indigo-100 flex-col text-center text-black  min-w-max  shadow-md bg-clip-border 
+
+            <table className=" bg-indigo-100 flex-col text-center text-black  min-w-max  shadow-md bg-clip-border 
                  items-center mb-2 mt-1 pl-2 border-slate-500">
-                    <thead>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+
+                        <th>Email</th>
+
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody className="font-secondary">
+                    {users.map((u, i) => (
                         <tr>
-                            <th>Nome</th>
+                            <td>{u.nome}</td>
+                            <td>{u.email}</td>
+                            <td>
+                                <a className="cursor-pointer px-3 mx-4 hover:shadow shadow-md text-white rounded-full bg-green-500"
+                                    onClick={() => updateUser(i)}
+                                >V</a>
 
-                            <th>Email</th>
-
-                            <th>Ações</th>
+                                <a className="cursor-pointer px-3 mx-4 hover:shadow shadow-md text-white rounded-full bg-red-500"
+                                    onClick={() => deleteUser(i)}
+                                >X</a>
+                            </td>
                         </tr>
-                    </thead>
-
-                    <tbody className="font-secondary">
-                        {users.map((u, i) => (
-                            <tr>
-                                <td>{u.nome}</td>
-                                <td>{u.email}</td>
-                                <td>
-                                    <a className="cursor-pointer px-3 mx-4 hover:shadow shadow-md text-white rounded-full bg-green-500"
-                                        onClick={() => updateUser(i)}
-                                    >V</a>
-
-                                    <a className="cursor-pointer px-3 mx-4 hover:shadow shadow-md text-white rounded-full bg-red-500"
-                                        onClick={() => deleteUser(i)}
-                                    >X</a>
-                                </td>
-                            </tr>
 
 
-                        ))}
-                    </tbody>
+                    ))}
+                </tbody>
 
-                </table>
-          
+            </table>
+
             <a onClick={() => {
                 setModal(true)
                 setIsEdit(true)
