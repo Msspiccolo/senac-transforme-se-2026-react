@@ -87,7 +87,7 @@ function Painel() {
             password:user.password
         });
         
-        if(!loginError){
+        if(loginError){
             setMsg("Não foi possível efetuar o login, verifique seus dados")
             setSpiner(false)
             return;
@@ -96,7 +96,7 @@ function Painel() {
 
         const {error: profileError} = await supabase.from('profiles').insert({
             user_id: loginData.user.id,
-            full_name: user.nome,
+            name: user.nome,
             cpf: user.cpf,
             telefone: user.phone,
             gender: user.gender,
@@ -108,12 +108,12 @@ function Painel() {
         if (profileError) {
             //console.log(authError)
             setMsg(profileError.message)
-            setSpiner(false)
+        
 
             return;
         }
 
-
+        setSpiner(false)
      
 
 
