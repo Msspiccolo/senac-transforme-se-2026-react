@@ -28,17 +28,24 @@ function Painel() {
     );
 
 
-    useEffect(() => {
-        (async () => {
-            const usersTemp = JSON.parse(localStorage.getItem('users'))
-            if (usersTemp) setUsers(usersTemp)
+   
 
-        })()
-    },
+    //Read - Ler (Crude)
+    async function loadUsers(){
+      const {data, error} = await supabase.from('profiles').select('*')
+      console.log('loadUsers data:', data, 'error:', error)
+      if (error){
+        setMsg(error.message)
+        return; 
+      }
 
-        []
+      setUsers(data)
 
-    );
+    }
+
+     useEffect(() => {
+        loadUsers()    
+    },[]);
 
 
     function deleteUser(index) {
@@ -309,8 +316,8 @@ function Painel() {
                 <tbody className="font-secondary">
                     {users.map((u, i) => (
                         <tr>
-                            <td>{u.nome}</td>
-                            <td>{u.email}</td>
+                            <td>{u.name}</td>
+                            <td>{u.cpf}</td>
                             <td>
                                 <a className="cursor-pointer px-3 mx-4 hover:shadow shadow-md text-white rounded-full bg-green-500"
                                     onClick={() => updateUser(i)}
