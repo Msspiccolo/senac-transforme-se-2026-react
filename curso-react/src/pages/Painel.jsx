@@ -317,7 +317,11 @@ function Painel() {
                     {users.map((u, i) => (
                         <tr>
                             <td>{u.name}</td>
+                            <td>{u.email}</td>
+                            <td>{u.nascimento}</td>
                             <td>{u.cpf}</td>
+                            <td>{u.telefone}</td>
+                            <td>{u.genero}</td>
                             <td>
                                 <a className="cursor-pointer px-3 mx-4 hover:shadow shadow-md text-white rounded-full bg-green-500"
                                     onClick={() => updateUser(i)}
