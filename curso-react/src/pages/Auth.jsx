@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { supabase } from '../supabase';
 
 function Auth() {
   
@@ -12,7 +11,6 @@ function Auth() {
 
 
     function handleLogin() {
-        
         const users = JSON.parse(localStorage.getItem("users"));
 
 
