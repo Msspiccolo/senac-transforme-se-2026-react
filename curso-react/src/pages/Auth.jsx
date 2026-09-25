@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
+import { supabase } from '../supabase';
 
 function Auth() {
-    /*const [variavel, funcaoAlteraVariavel]= useState('valor inicial');*/
+  
     const [email, setEmail] = useState("")
     const [pass, setPassword] = useState("")
     const [msg, setMsg] = useState("")
@@ -11,6 +12,7 @@ function Auth() {
 
 
     function handleLogin() {
+        
         const users = JSON.parse(localStorage.getItem("users"));
 
 
@@ -20,7 +22,7 @@ function Auth() {
         })
 
         if (!user) {
-            // Os estudantes iram fazer uma useState de mensagem
+            
         
             setMsg("Usuário não encontrado");
 
@@ -28,13 +30,13 @@ function Auth() {
         }
 
         if (user.password == pass) {
-            //mando para tela do painel
+           
             localStorage.setItem("loggeded", JSON.stringify(user));
             setMsg("Seja bem vindo!");
             nav('/painel');
 
         } else {
-            //outra mensagem usando a mesma UseState de mensagem
+           
             setMsg("Usuário não encontrado")
 
         }
