@@ -51,29 +51,28 @@ function Painel() {
 
 
 
-async function deleteUser(user) {
-        const { error } = await supabase
-            .from('profiles')
-            .delete()
-            .eq('id', user.id)
-
-             if (error) {
-            setMsg(error.message)
-            return
-           
-        }
-        setMsg("Usuário deletado com sucesso")
-        
+async function deleteUser(index) {
        
-     }
+    const {data, error } = await supabase
+      .from('profiles')
+      .delete()
+      .eq('id', index)
+    
+    if (error) {
+        setMsg(error.message)
+        return;
+    }
+    
+    loadUsers()
 
+}
     
 async function editUser(user) {
         setSpiner(true)
         const { data, error } = await supabase
             .from('profiles')
             .update(user)
-            .eq('id', index)
+            .eq('id', user.id)
             .select()
 
 
@@ -95,15 +94,6 @@ function updateUser(user) {
 
 
     }
-
-function deleteUser(user) {
-        setModal(false)
-        setUser(user)
-        setIndex(user.id)
-
-    }
-
-
 
 
 async function handleRegister() {
@@ -381,7 +371,7 @@ async function handleRegister() {
                                 >V</a>
 
                                 <a className="cursor-pointer px-3 mx-4 hover:shadow shadow-md text-white rounded-full bg-red-500"
-                                    onClick={() => deleteUser(u)}
+                                    onClick={() => deleteUser(u.id)}
                                 >X</a>
                             </td>
                         </tr>
