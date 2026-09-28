@@ -98,9 +98,10 @@ function updateUser(user) {
 
 async function handleRegister() {
         setSpiner(true)
+        const {email, password, ...dataProfile} = user
         const { data: authData, error: authError } = await supabase.auth.signUp({
-            email: user.email,
-            password: user.password
+            email: email,
+            password: password
         });
 
         if (authError) {
@@ -118,8 +119,8 @@ async function handleRegister() {
         }
 
         const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
-            email: user.email,
-            password: user.password
+            email: email,
+            password: password
         });
 
         if (loginError) {
@@ -131,8 +132,7 @@ async function handleRegister() {
 
         const { error: profileError } = await supabase.from('profiles').insert({
             user_id: loginData.user.id,
-            ...user,
-            user_id: loginData.user.id
+            ...dataProfile
         });
 
 
