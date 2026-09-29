@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router';
 import Home from './pages/Home.jsx';
 import Auth from './pages/Auth.jsx';
 import Painel from './pages/Painel.jsx';
+import {Template} from './components/Template';
 
 function App() {
   // Tudo do lado de fora é JS
@@ -16,6 +17,8 @@ function App() {
       <Route path="/auth" element={<Auth />} />
 
       <Route path="/painel" element={<Painel />} />
+
+      <Route path='/template' element={<Template />} />
 
     </Routes>
   );

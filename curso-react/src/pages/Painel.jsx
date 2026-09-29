@@ -2,6 +2,7 @@ import { Link } from 'react-router';
 import { useState, useEffect } from 'react';
 import { supabase } from '../../utils/supabase';
 import { ToastSucess, useToast } from '../components/Toast';
+import {Template} from '../components/Template';
 
 function Painel() {
     const [modal, setModal] = useState(false)//bollean
@@ -13,7 +14,7 @@ function Painel() {
 
 
     const [spiner, setSpiner] = useState(false)
-    const {msg, setMsg} = useToast()
+    const { msg, setMsg } = useToast()
 
 
     useEffect(() => {
@@ -52,23 +53,23 @@ function Painel() {
 
 
 
-async function deleteUser(index) {
-       
-    const {data, error } = await supabase
-      .from('profiles')
-      .delete()
-      .eq('id', index)
-    
-    if (error) {
-        setMsg(error.message)
-        return;
-    }
-    
-    loadUsers()
+    async function deleteUser(index) {
 
-}
-    
-async function editUser(user) {
+        const { data, error } = await supabase
+            .from('profiles')
+            .delete()
+            .eq('id', index)
+
+        if (error) {
+            setMsg(error.message)
+            return;
+        }
+
+        loadUsers()
+
+    }
+
+    async function editUser(user) {
         setSpiner(true)
         const { data, error } = await supabase
             .from('profiles')
@@ -88,7 +89,7 @@ async function editUser(user) {
 
     }
 
-function updateUser(user) {
+    function updateUser(user) {
         setModal(true)
         setUser(user)
         setIndex(user.id)
@@ -97,9 +98,9 @@ function updateUser(user) {
     }
 
 
-async function handleRegister() {
+    async function handleRegister() {
         setSpiner(true)
-        const {email, password, ...dataProfile} = user
+        const { email, password, ...dataProfile } = user
         const { data: authData, error: authError } = await supabase.auth.signUp({
             email: email,
             password: password
@@ -158,191 +159,157 @@ async function handleRegister() {
         <>
 
             <h3 className="flex items-center text-center justify-center m-20  px-2 text-black font-bold py-4  ">Bem vindo, {loggeded?.nome} </h3>
-
-
-            <nav className="fixed top-0 flex items-center py-2 px-2 shadow-lg  bg-[#010620] w-full z-50">
-                <h2 className="mr-2 px-2 font-bold">
-                    <span className="text-white">Prótese</span>
-                    <span className="text-orange-500">Pay</span>
-                </h2>
-
-                <a
-                    className="mr-2 px-2 bg-primary hover:shadow-inner text-white"
-                    href="/#about"
-                >
-                    Sobre
-                </a>
-
-                <a
-                    className="mr-2 px-2 bg-primary hover:shadow-inner text-white"
-                    href="/#prices"
-                >
-                    Preços
-                </a>
-
-                <a
-                    className="mr-2 px-2 bg-primary hover:shadow-inner text-white"
-                    href="/#features"
-                >
-                    Benefícios
-                </a>
-
-                <Link
-                    className="mr-5 px-2 bg-primary hover:shadow-inner text-white rounded ml-auto shadow"
-                    to="/"
-                >
-                    Menu
-                </Link>
-
-            </nav>
+            <Template>
 
 
 
-            {modal && (
 
-                (<div className="fixed flex top-0 right-0 bottom-0 
+                {modal && (
+
+                    (<div className="fixed flex top-0 right-0 bottom-0 
                 left-0  items-center  justify-center bg-black/50 z-50 ">
 
-                    <div className="relative max-w-md w-full p-5 bg-about rounded-lg 
+                        <div className="relative max-w-md w-full p-5 bg-about rounded-lg 
                     shadow-md flex flex-col bg-gradient-to-r from-[#24132F] via-[#17234A] to-[#102A52]">
 
-                        <a onClick={() => {
-                            setModal(false)
-                            setIsEdit(false)
-                            setUser({})
-                            setIndex(-1)
+                            <a onClick={() => {
+                                setModal(false)
+                                setIsEdit(false)
+                                setUser({})
+                                setIndex(-1)
 
-                        }}
-                            className="bg-prices absolute top-0 right-0  px-2 
+                            }}
+                                className="bg-prices absolute top-0 right-0  px-2 
                          rounded-full cursor-pointer ">
-                            X
-                        </a>
+                                X
+                            </a>
 
-                        <h2 className="text-white font-bold">Cadastre um novo usuário!</h2>
-                        <p className="text-white font-bold">Preencha as informações abaixo: </p>
+                            <h2 className="text-white font-bold">Cadastre um novo usuário!</h2>
+                            <p className="text-white font-bold">Preencha as informações abaixo: </p>
 
-                        {isEdit ? (
+                            {isEdit ? (
 
 
-                            <form className="flex flex-col">
+                                <form className="flex flex-col">
 
-                                <label className="text-sm font-semibold text-white">Nome: </label>
+                                    <label className="text-sm font-semibold text-white">Nome: </label>
 
-                                <input value={user.name} onChange={(e) => setUser({ ...user, name: e.target.value })}
-                                    className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
+                                    <input value={user.name} onChange={(e) => setUser({ ...user, name: e.target.value })}
+                                        className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
                                 placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
-                                    type="text" placeholder="Digite seu nome completo"
-                                />
-                                {index == -1 && (
-                                    <>
-                                        <label className="text-sm font-semibold text-white">Email: </label>
+                                        type="text" placeholder="Digite seu nome completo"
+                                    />
+                                    {index == -1 && (
+                                        <>
+                                            <label className="text-sm font-semibold text-white">Email: </label>
 
-                                        <input value={user.email} onChange={(e) => setUser({ ...user, email: e.target.value })}
-                                            className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
+                                            <input value={user.email} onChange={(e) => setUser({ ...user, email: e.target.value })}
+                                                className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
                                 placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
-                                            type="email" placeholder="Digite o seu melhor email"
-                                        />
-                                        <label className="text-sm font-semibold text-white"> Senha: </label>
+                                                type="email" placeholder="Digite o seu melhor email"
+                                            />
+                                            <label className="text-sm font-semibold text-white"> Senha: </label>
 
-                                        <input onChange={(e) => setUser({ ...user, password: e.target.value })}
-                                            className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
+                                            <input onChange={(e) => setUser({ ...user, password: e.target.value })}
+                                                className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
                                 placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
-                                            type="password" placeholder="Letra maiúscula e números"
-                                        />
-                                    </>
+                                                type="password" placeholder="Letra maiúscula e números"
+                                            />
+                                        </>
 
-                                )}
+                                    )}
 
-                                <label className="text-sm font-semibold text-white">CPF: </label>
+                                    <label className="text-sm font-semibold text-white">CPF: </label>
 
-                                <input value={user.cpf} onChange={(e) => setUser({ ...user, cpf: e.target.value })}
-                                    className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
+                                    <input value={user.cpf} onChange={(e) => setUser({ ...user, cpf: e.target.value })}
+                                        className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
                                 placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
-                                    type="text" placeholder="Digite o seu CPF:"
-                                />
+                                        type="text" placeholder="Digite o seu CPF:"
+                                    />
 
-                                <label className="text-sm font-semibold text-white">Telefone: </label>
+                                    <label className="text-sm font-semibold text-white">Telefone: </label>
 
-                                <input value={user.telefone} onChange={(e) => setUser({ ...user, telefone: e.target.value })}
-                                    className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
+                                    <input value={user.telefone} onChange={(e) => setUser({ ...user, telefone: e.target.value })}
+                                        className="text-black w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3
                                 placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
-                                    type="text" placeholder="Digite o seu telefone: "
-                                />
+                                        type="text" placeholder="Digite o seu telefone: "
+                                    />
 
-                                <label className="text-sm font-semibold text-white">Genero: </label>
+                                    <label className="text-sm font-semibold text-white">Genero: </label>
 
-                                <input value={user.gender} onChange={(e) => setUser({ ...user, gender: e.target.value })}
-                                    className="text-black  w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3 p-3
+                                    <input value={user.gender} onChange={(e) => setUser({ ...user, gender: e.target.value })}
+                                        className="text-black  w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3 p-3
                                 placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
-                                    type="text"
-                                />
+                                        type="text"
+                                    />
 
 
-                                <label className="text-sm font-semibold text-white">Data Nascimento: </label>
+                                    <label className="text-sm font-semibold text-white">Data Nascimento: </label>
 
-                                <input value={user.nascimento} onChange={(e) => setUser({ ...user, nascimento: e.target.value })}
-                                    className="text-black  w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3 p-3
+                                    <input value={user.nascimento} onChange={(e) => setUser({ ...user, nascimento: e.target.value })}
+                                        className="text-black  w-full rounded-lg border-2 outline-none border-purple-900 !bg-purple-100 px-4 py-3 p-3
                                 placeholder:text-grey-100 focus:border-[#5278B5] focus:ring-2 focus:ring-[#5278B5]/30"
-                                    type="date"
-                                />
+                                        type="date"
+                                    />
 
 
 
 
-                                {index != -1 && (
-                                    <a onClick={() => setIsEdit(false)}
-                                        className=" cursor-pointer p-4 mr-auto px-2  mt-2 rounded ml-auto bg-red-500 py-2  font-bold text-white hover:bg-red-200">
-                                        Cancelar
-                                    </a>
-                                )
-                                }
-
-
-                                <a onClick={
-                                    () => {
-                                        if (index == -1)
-                                            handleRegister()
-
-                                        else
-                                            editUser()
-
+                                    {index != -1 && (
+                                        <a onClick={() => setIsEdit(false)}
+                                            className=" cursor-pointer p-4 mr-auto px-2  mt-2 rounded ml-auto bg-red-500 py-2  font-bold text-white hover:bg-red-200">
+                                            Cancelar
+                                        </a>
+                                    )
                                     }
 
-                                }
-                                    className=" cursor-pointer p-4 mr-auto px-2  mt-2 rounded ml-auto bg-orange-500 py-2  
-                                font-bold text-white hover:bg-orange-300"
-                                >
-                                    {spiner ? '...' : 'Salvar'}
-                                </a>
-                                
-                            </form>) : //else 
-                            (
-                                <>
-                                    <p>Nome:  {user.name}</p>
-                                    <p>Data de Nascimento:  {user.nascimento}</p>
-                                    <p>CPF: {user.cpf} </p>
-                                    <p>Telefone: {user.telefone} </p>
-                                    <p>Genero: {user.gender} </p>
 
-                                    <a onClick={() => setIsEdit(true)}
-                                        className=" cursor-pointer p-4 mr-auto px-2  mt-2 rounded ml-auto bg-orange-500 py-2  font-bold text-white hover:bg-white-600">
-                                        Alterar
+                                    <a onClick={
+                                        () => {
+                                            if (index == -1)
+                                                handleRegister()
+
+                                            else
+                                                editUser()
+
+                                        }
+
+                                    }
+                                        className=" cursor-pointer p-4 mr-auto px-2  mt-2 rounded ml-auto bg-orange-500 py-2  
+                                font-bold text-white hover:bg-orange-300"
+                                    >
+                                        {spiner ? '...' : 'Salvar'}
                                     </a>
 
+                                </form>) : //else 
+                                (
+                                    <>
+                                        <p>Nome:  {user.name}</p>
+                                        <p>Data de Nascimento:  {user.nascimento}</p>
+                                        <p>CPF: {user.cpf} </p>
+                                        <p>Telefone: {user.telefone} </p>
+                                        <p>Genero: {user.gender} </p>
+
+                                        <a onClick={() => setIsEdit(true)}
+                                            className=" cursor-pointer p-4 mr-auto px-2  mt-2 rounded ml-auto bg-orange-500 py-2  font-bold text-white hover:bg-white-600">
+                                            Alterar
+                                        </a>
 
 
-                                </>
-                            )
 
-                        }
+                                    </>
+                                )
 
-                    </div>
+                            }
+
+                        </div>
 
 
-                </div>)
+                    </div>)
 
-            )}
+                )}
 
+            </Template>
             <table className=" bg-indigo-100 flex-col text-center text-black  min-w-max  shadow-md bg-clip-border 
                  items-center mb-2 mt-1 pl-2 border-slate-500">
                 <thead>
@@ -391,7 +358,7 @@ async function handleRegister() {
                 +
             </a>
 
-            <ToastSucess msg = {msg} setMsg={setMsg}/>
+            <ToastSucess msg={msg} setMsg={setMsg} />
 
 
 
