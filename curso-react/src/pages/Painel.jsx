@@ -1,6 +1,7 @@
-import { Link } from 'react-router'
+import { Link } from 'react-router';
 import { useState, useEffect } from 'react';
 import { supabase } from '../../utils/supabase';
+import { ToastSucess, useToast } from '../components/Toast';
 
 function Painel() {
     const [modal, setModal] = useState(false)//bollean
@@ -12,7 +13,7 @@ function Painel() {
 
 
     const [spiner, setSpiner] = useState(false)
-    const [msg, setMsg] = useState('')
+    const {msg, setMsg} = useToast()
 
 
     useEffect(() => {
@@ -313,7 +314,7 @@ async function handleRegister() {
                                 >
                                     {spiner ? '...' : 'Salvar'}
                                 </a>
-                                {msg}
+                                
                             </form>) : //else 
                             (
                                 <>
@@ -390,7 +391,7 @@ async function handleRegister() {
                 +
             </a>
 
-
+            <ToastSucess msg = {msg} setMsg={setMsg}/>
 
 
 
